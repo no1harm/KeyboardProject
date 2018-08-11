@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>KeyboardNet</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
+    <script src="main.js"></script>
+</head>
+<body>
+    <header></header>
+    <main >
+        <div class="wrapper" id="mainFather"></div>
+    </main>
+    <footer></footer>
+    <script>
+        var keys = {
+            0: ['Q','W','E','R','T','Y','U','I','O','P'],
+            1: ['A','S','D','F','G','H','J','K','L'],
+            2: ['Z','X','C','V','B','N','M'],
+            length: 3,
+        }
+        var hash = {
+            q: 'qq.com',
+            w: 'weibo.com',
+            z: 'zhihu.com',
+            n: 'ngo.com',
+            m: 'www.mcdonalds.com'
+        }
+        // 取出localStorage中的hashValue所对应的hash
+        var hashInLocalStorage = JSON.parse(localStorage.getItem('hashValue') || 'null')
+        if(hashInLocalStorage) {
+            hash = hashInLocalStorage
+        }
+        index = 0;
+        //遍历keys，生成div标签
+        while(index < keys['length']) {
+            divCreate = document.createElement('div')
+            mainFather.append(divCreate)
+            row = keys[index]
+            index2 = 0
+            //遍历keys，生成kbd标签
+            while(index2 < row.length) {
+                kbdCreate = document.createElement('kbd')
+                rowText = row[index2]
+                //获取kbd标签内容
+                kbdCreate.textContent = rowText
+                buttonCre = document.createElement('button')
+                buttonCre.textContent = '编辑'
+                buttonCre.id = rowText
+                buttonCre.onclick = function(keyWord) {
+                    key = keyWord.target.id
+                    x = prompt('give me a website')  
+                    hash[key] = x
+                    //使用localStorage存储
+                    localStorage.setItem('hashValue',JSON.stringify(hash))
+                }
+                kbdCreate.append(buttonCre)
+                divCreate.append(kbdCreate)
+                index2 += 1
+            }
+            index += 1
+        }
+        document.onkeypress = function(keyWord) {
+            // 得知用户按下的是哪个键
+            key = keyWord['key']
+            //得到用户所获得的哪个地址
+            website = hash[key]
+            // 把当前网站的地址变为新的网站地址
+            // location.href = "http://" + website
+            //在新窗口打开网站地址
+            window.open("http://" + website,'_blank')
+        }
+    </script>
+</body>
+</html>
